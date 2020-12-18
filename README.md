@@ -1,4 +1,4 @@
-#Mostaffa - simple GUI for MOSS
+# Mostaffa - simple GUI for MOSS
 
 Todo: make documentation
 
