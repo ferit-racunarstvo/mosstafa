@@ -4,10 +4,7 @@ from queue import Queue
 from enum import Enum
 from threading import Thread
 from mosstafa import mosstafa
-
-fields = {'User ID': "", 'Directory (d)': 0, "X (x)": 0, 'Max matches (m)': 10, 'Show (n)': 250,
-          'Language (l)': "python", 'Query (c)': ""}
-directories = {"Base", "Test"}
+from mosstafa.config import FIELDS, DIR
 
 
 class Event(Enum):
@@ -29,13 +26,15 @@ def update_cycle(gui, queue):
 
         else:
             if msg == Event.GENERATE_REPORT:
+                gui.generate_button.configure(text="Generating.. please wait")
                 mosstafa.generate_report(gui.dir, gui.entries)
+                gui.generate_button.configure(text="Generate report")
 
 
 def init_gui(root, fields, directories, queue):
     entries, dir = {}, {}
 
-    config_frame = tk.LabelFrame(root, text="This is a LabelFrame")
+    config_frame = tk.LabelFrame(root, text="Configuration")
     config_frame.pack(padx=5, pady=5)
 
     for key, value in fields.items():
@@ -79,14 +78,14 @@ def init_gui(root, fields, directories, queue):
                                 command=lambda: queue.put(Event.GENERATE_REPORT))
     generate_button.pack(side=tk.RIGHT, padx=5, pady=5, expand=True, fill=tk.BOTH)
 
-    return SimpleNamespace(dir=dir, entries=entries)
+    return SimpleNamespace(dir=dir, entries=entries, generate_button=generate_button)
 
 
 if __name__ == '__main__':
-    root = tk.Tk(className='Mosstafa 0.1 - Simple Moss Gui')
+    root = tk.Tk(className='Mosstafa v1-beta - Simple Moss Gui')
     queue = Queue()
 
-    gui = init_gui(root, fields, directories, queue)
+    gui = init_gui(root, FIELDS, DIR, queue)
 
     t = Thread(target=update_cycle, args=(gui, queue,))
     t.daemon = True
