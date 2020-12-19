@@ -1,7 +1,10 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import messagebox
 import mosspy
 import os
+import webbrowser
+from mosstafa.validation import validation
 
 
 def add_directory(directory, type):
@@ -26,6 +29,10 @@ def generate_report(dir, entries):
 
     base_files, test_files = _populate_files_from_directory(dir, base_files, test_files)
     config = _set_config_from_entries(entries)
+
+    if validation.required_entries_missing(config) or not test_files:
+        messagebox.showinfo("Notice", "Missing UserID, language or test directory ! Check your fields and try again")
+        return
 
     _send_request(config, base_files, test_files)
 
@@ -54,18 +61,6 @@ def _set_config_from_entries(entries):
     return config
 
 
-def _init_moss(config):
-    m = mosspy.Moss(config[0], config[5])
-
-    m.setIgnoreLimit(config[3])
-    m.setCommentString(config[6])
-    m.setNumberOfMatchingFiles(int(config[4]))
-    m.setDirectoryMode(config[1])
-    m.setExperimentalServer(config[6])
-
-    return m
-
-
 def _send_request(config, base, test):
     m = _init_moss(config)
 
@@ -75,5 +70,31 @@ def _send_request(config, base, test):
     for file in test:
         m.addFile(file)
 
-    url = m.send()
-    print("Report Url: " + url)
+    try:
+        url = m.send()
+        messagebox.showinfo("Info", "Report successfully generated !")
+        webbrowser.open(url, new=2)
+
+    except Exception as e:
+        messagebox.showinfo("Error", "Error: %s" % str(e))
+
+
+def _init_moss(config):
+    m = mosspy.Moss(config[0], config[5])
+
+    if config[3] != "":
+        m.setIgnoreLimit(int(config[3]))
+
+    if config[6] != "":
+        m.setCommentString(config[6])
+
+    if config[4] != "":
+        m.setNumberOfMatchingFiles(int(config[4]))
+
+    if config[1] != "":
+        m.setDirectoryMode(int(config[1]))
+
+    if config[2] != "":
+        m.setExperimentalServer(int(config[2]))
+
+    return m
