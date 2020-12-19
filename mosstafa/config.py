@@ -1,4 +1,4 @@
-FIELDS = {'User ID': "440126148",
+FIELDS = {'User ID': "",
           'Directory (d)': 0,
           "X (x)": 0,
           'Max matches (m)': 10,
