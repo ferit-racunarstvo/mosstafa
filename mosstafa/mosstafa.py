@@ -33,6 +33,7 @@ def generate_report(dir, entries):
 def _populate_files_from_directory(dir, base_files, test_files):
     for key, value in dir.items():
         directories = value.get(0, tk.END)
+
         for directory in directories:
             for path, subdirs, files in os.walk(directory):
                 for name in files:
@@ -53,12 +54,20 @@ def _set_config_from_entries(entries):
     return config
 
 
-def _send_request(config, base, test):
+def _init_moss(config):
     m = mosspy.Moss(config[0], config[5])
 
-    print(base)
-    print(test)
-    print(config)
+    m.setIgnoreLimit(config[3])
+    m.setCommentString(config[6])
+    m.setNumberOfMatchingFiles(int(config[4]))
+    m.setDirectoryMode(config[1])
+    m.setExperimentalServer(config[6])
+
+    return m
+
+
+def _send_request(config, base, test):
+    m = _init_moss(config)
 
     for file in base:
         m.addBaseFile(file)
