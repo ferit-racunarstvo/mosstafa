@@ -1,4 +1,7 @@
+altgraph==0.17
 beautifulsoup4==4.9.3
 lxml==4.6.2
 mosspy==1.0.8
+pyinstaller==4.1
+pyinstaller-hooks-contrib==2020.10
 soupsieve==2.1
