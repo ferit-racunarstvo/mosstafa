@@ -36,9 +36,9 @@ Mosstafa is a simple GUI for Moss.   [What is Moss ?](https://theory.stanford.ed
 
 ### How Mosstafa works
 
-Mosstafa behind GUI uses awesome [Mosspy](https://github.com/soachishti/moss.py) script for communicating with Moss server.
+Mosstafa behind GUI uses awesome [Mosspy](https://github.com/soachishti/moss.py) script for communicating with Moss server. When you insert the Base or Test directory, Mustaffa finds all files inside the current directory and its subdirectories. 
 
-### For development environment
+### For dev environment
 
 Clone repository in desired directory
 ```sh
